@@ -5,9 +5,11 @@ import SeekSlider from "../components/SeekSlider";
 import Duration from "../components/Duration";
 import CurrentTime from "../components/CurrentTime";
 import VideoFrame from "../components/VideoFrame";
+import PlayPauseButton from "../components/PlayPauseButton";
+
+import List from "./List";
 
 const Demo = () => {
-  const { onTrackPlay, onTrackPause, duration, isPlaying } = useMusicPlayer();
   const [link, setLink] = useState("");
   const [id, setId] = useState("");
 
@@ -18,19 +20,8 @@ const Demo = () => {
       <div style={{ display: "flex" }}>
         <CurrentTime /> - <Duration />
       </div>
-      <input placeholder="link" onChange={(e) => setLink(e.target.value)} />
-      <input placeholder="id" onChange={(e) => setId(e.target.value)} />
-      <button
-        onClick={() =>
-          onTrackPlay({
-            id,
-            url: link,
-          })
-        }
-      >
-        play track
-      </button>
-      <button onClick={() => onTrackPause()}>pause track</button>
+      <PlayPauseButton />
+      <List />
     </div>
   );
 };

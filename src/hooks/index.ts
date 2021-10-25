@@ -39,37 +39,50 @@ const useMusicPlayer = () => {
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
+  // current time handlers
   useInterval(
     () => {
       const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
-      if (isYoutubeLink) {
-        state.player.on("timeupdate", () => {
-          setCurrentTime(state.player.getCurrentTime());
-        });
-      } else {
+
+      if (!isYoutubeLink) {
         setCurrentTime(state.player.currentTime);
       }
     },
-    state.isPlaying ? 100 : null
+    state.isPlaying ? 1000 : null
   );
+  useEffect(() => {
+    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+    if (isYoutubeLink && isLoaded) {
+      state.player.on("timeupdate", () => {
+        setCurrentTime(state.player.getCurrentTime());
+      });
+    }
+  }, [isLoaded]);
 
   // @HANDLERS
 
-  function onTrackPlay({ id, url }: TrackPlayArgs) {
-    if (state.currentTrackId == id) {
-      dispatchPlayTrack({ dispatch });
-      return;
+  function onTrackLoad({ id, url }: TrackPlayArgs) {
+    // pause because we want to pause previous track was playing
+    // so we will not have two tracks playing together
+    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+
+    if (isYoutubeLink && state.player.destroy) {
+      state.player.destroy();
     }
 
-    // because we want to pause previous track was playing
-    // so we will not have two tracks playing together
     state.player.pause();
     setIsLoaded(false);
     dispatchTrackData({ dispatch, id, url });
   }
+
+  function onTrackPlay() {
+    dispatchPlayTrack({ dispatch });
+  }
+
   function onTrackPause() {
     dispatchPauseTrack({ dispatch });
   }
+
   function seekTo(time: Number) {
     const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
     if (isYoutubeLink) {
@@ -93,6 +106,7 @@ const useMusicPlayer = () => {
   // load youtube link effect
   useEffect(() => {
     const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+
     if (isYoutubeLink) {
       const id = getYouTubeID(state.currentTrackUrl);
       state.player.load(id, true);
@@ -115,30 +129,26 @@ const useMusicPlayer = () => {
       state.player.on("playing", () => {
         setDuration(state.player.getDuration());
       });
+      setIsLoaded(true);
       // if regular media element get duration from it
     } else {
       state.player.addEventListener("canplay", handleCanPlay);
 
-      if (isLoaded) {
-        setDuration(state.player.duration);
-      }
+      setDuration(state.player.duration || 0);
+
+      return () => {
+        state.player.removeEventListener("canplay", handleCanPlay);
+      };
     }
-  }, [state.player, state.player.duration, isLoaded, state.currentTrackUrl]);
-
-  useEffect(() => {
-    if (!state.player || !state.player.currentTime) {
-      return;
-    }
-
-    setCurrentTime(state.player.currentTime);
-  }, [state.player, state.player.currentTime]);
-
+  }, [state.player, state.player.duration, state.currentTrackUrl]);
+  console.log("currentTime: ", currentTime);
   return {
     state,
     duration,
     currentTime,
     seekTo,
     isPlaying: state.isPlaying,
+    onTrackLoad,
     onTrackPlay,
     onTrackPause,
   };

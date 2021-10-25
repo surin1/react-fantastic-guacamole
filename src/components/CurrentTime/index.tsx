@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import { useMusicPlayer } from "../../hooks";
 
-const Duration = () => {
+const CurrentTime = () => {
   const { currentTime } = useMusicPlayer();
-
+  console.log(123, currentTime);
   return <div>{currentTime}</div>;
 };
 
-export default Duration;
+export default CurrentTime;
