@@ -1,0 +1,32 @@
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.header,
+.track {
+  display: flex;
+  padding: 8px 0;
+}
+
+.header > .cell {
+  text-transform: capitalize;
+}
+
+.track:hover {
+  cursor: pointer;
+  background-color: lightblue;
+}
+
+.cell {
+  width: 230px;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cell:nth-child(1) {
+  width: 30px;
+}

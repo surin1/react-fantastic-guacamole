@@ -5,16 +5,27 @@ type PlayTrackArgTypes = {
   dispatch: ({}) => any;
   id: string;
   url: string;
+  title: string;
+  artist: string;
 };
 type PlayPauseTrackArgTypes = {
   dispatch: ({}) => any;
 };
 
-export function dispatchTrackData({ dispatch, id, url }: PlayTrackArgTypes) {
+export function dispatchTrackData({
+  dispatch,
+  id,
+  url,
+  title,
+  artist,
+}: PlayTrackArgTypes) {
   // need to dispatch different player depending on if it's youtube or default audio
   const isYoutubeLink = url.match(youtubeRegExp);
   if (isYoutubeLink) {
-    const youtubePlayer = new YTPlayer("#player");
+    const youtubePlayer = new YTPlayer("#player", {
+      width: 100,
+      height: 100,
+    });
     dispatch({ type: "PLAYER_SET", payload: youtubePlayer });
   } else {
     const audio = new Audio(url);
@@ -23,6 +34,7 @@ export function dispatchTrackData({ dispatch, id, url }: PlayTrackArgTypes) {
 
   dispatch({ type: "CURRENT_TRACK_URL_SET", payload: url });
   dispatch({ type: "CURRENT_TRACK_ID_SET", payload: id });
+  dispatch({ type: "CURRENT_TRACK_DATA_SET", payload: { title, artist } });
 }
 
 export function dispatchPauseTrack({ dispatch }: PlayPauseTrackArgTypes) {

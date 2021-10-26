@@ -8,6 +8,7 @@ import VideoFrame from "../components/VideoFrame";
 import PlayPauseButton from "../components/PlayPauseButton";
 
 import List from "./List";
+import Player from "./Player";
 
 const Demo = () => {
   const [link, setLink] = useState("");
@@ -15,12 +16,7 @@ const Demo = () => {
 
   return (
     <div>
-      <VideoFrame />
-      <SeekSlider />
-      <div style={{ display: "flex" }}>
-        <CurrentTime /> - <Duration />
-      </div>
-      <PlayPauseButton />
+      <Player />
       <List />
     </div>
   );

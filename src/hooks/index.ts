@@ -12,6 +12,8 @@ import { youtubeRegExp } from "../utils/regexp";
 type TrackPlayArgs = {
   id: string;
   url: string;
+  title: string;
+  artist: string;
 };
 
 function useInterval(callback: any, delay: any) {
@@ -61,7 +63,7 @@ const useMusicPlayer = () => {
 
   // @HANDLERS
 
-  function onTrackLoad({ id, url }: TrackPlayArgs) {
+  function onTrackLoad({ id, url, title, artist }: TrackPlayArgs) {
     // pause because we want to pause previous track was playing
     // so we will not have two tracks playing together
     const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
@@ -74,7 +76,7 @@ const useMusicPlayer = () => {
 
     state.player.pause();
     setIsLoaded(false);
-    dispatchTrackData({ dispatch, id, url });
+    dispatchTrackData({ dispatch, id, url, title, artist });
   }
 
   function onTrackPlay() {
@@ -150,6 +152,7 @@ const useMusicPlayer = () => {
     state,
     duration,
     currentTime,
+    trackData: state.trackData,
     seekTo,
     isPlaying: state.isPlaying,
     onTrackLoad,

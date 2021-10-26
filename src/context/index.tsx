@@ -3,12 +3,17 @@ import React, { useState, useEffect, useReducer } from "react";
 type Props = {
   children: JSX.Element;
 };
+type Track = {
+  title: string;
+  artist: string;
+};
 
 interface InitialState {
   player: HTMLAudioElement;
   currentTrackId: number;
   currentTrackUrl: string;
   isPlaying: boolean;
+  trackData: Track;
 }
 const PlayerContext = React.createContext([{} as InitialState, {} as any]);
 
@@ -17,6 +22,7 @@ enum PLAYER_ACTIONS {
   CURRENT_TRACK_ID_SET = "CURRENT_TRACK_ID_SET",
   CURRENT_TRACK_URL_SET = "CURRENT_TRACK_URL_SET",
   IS_PLAYING_SET = "IS_PLAYING_SET",
+  CURRENT_TRACK_DATA_SET = "CURRENT_TRACK_DATA_SET",
 }
 interface SetPlayerAction {
   type: PLAYER_ACTIONS;
@@ -45,6 +51,11 @@ function playerReducer(state: InitialState, action: SetPlayerAction) {
         ...state,
         isPlaying: payload,
       };
+    case PLAYER_ACTIONS.CURRENT_TRACK_DATA_SET:
+      return {
+        ...state,
+        trackData: payload,
+      };
     default:
       return state;
   }
@@ -55,6 +66,10 @@ const initialState = {
   isPlaying: false,
   currentTrackId: 0,
   currentTrackUrl: "",
+  trackData: {
+    title: "",
+    artist: "",
+  },
 };
 const PlayerProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(playerReducer, initialState);
