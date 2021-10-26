@@ -57,7 +57,7 @@ const useMusicPlayer = () => {
         setCurrentTime(state.player.getCurrentTime());
       });
     }
-  }, [isLoaded]);
+  }, [isLoaded, state.currentTrackId]);
 
   // @HANDLERS
 
@@ -67,6 +67,8 @@ const useMusicPlayer = () => {
     const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
 
     if (isYoutubeLink && state.player.destroy) {
+      seekTo(0);
+      setCurrentTime(0);
       state.player.destroy();
     }
 
@@ -134,14 +136,16 @@ const useMusicPlayer = () => {
     } else {
       state.player.addEventListener("canplay", handleCanPlay);
 
-      setDuration(state.player.duration || 0);
+      if (state.player.duration) {
+        setDuration(state.player.duration);
+      }
 
       return () => {
         state.player.removeEventListener("canplay", handleCanPlay);
       };
     }
-  }, [state.player, state.player.duration, state.currentTrackUrl]);
-  console.log("currentTime: ", currentTime);
+  }, [state.player, state.player.duration, state.currentTrackId]);
+
   return {
     state,
     duration,
