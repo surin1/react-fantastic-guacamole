@@ -13,3 +13,16 @@ yarn build
 ```
 
 to bundle your application
+
+- wrap component with PlayerProvider
+- add <div id="player"/> on the page
+
+import {
+useMusicPlayer,
+CurrentTime,
+Duration,
+PlayPauseButton,
+SeekSlider,
+VideoFrame,
+PlayerProvider,
+} from 'react-fantastic-guacamole'

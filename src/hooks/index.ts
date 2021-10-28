@@ -19,6 +19,10 @@ type TrackPlayArgs = {
 function useInterval(callback: any, delay: any) {
   const savedCallback = useRef(null);
 
+  if (!savedCallback) {
+    return;
+  }
+
   useEffect(() => {
     savedCallback.current = callback;
   });
@@ -35,7 +39,7 @@ function useInterval(callback: any, delay: any) {
   }, [delay]);
 }
 
-const useMusicPlayer = () => {
+export function useMusicPlayer() {
   const [state, dispatch] = useContext(PlayerContext);
   const [isLoaded, setIsLoaded] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -44,40 +48,24 @@ const useMusicPlayer = () => {
   // current time handlers
   useInterval(
     () => {
-      const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+      const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
 
       if (!isYoutubeLink) {
-        setCurrentTime(state.player.currentTime);
+        setCurrentTime(state.player?.currentTime);
       }
     },
     state.isPlaying ? 1000 : null
   );
   useEffect(() => {
-    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+    const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
     if (isYoutubeLink && isLoaded) {
       state.player.on("timeupdate", () => {
-        setCurrentTime(state.player.getCurrentTime());
+        setCurrentTime(state.player?.getCurrentTime());
       });
     }
   }, [isLoaded, state.currentTrackId]);
 
   // @HANDLERS
-
-  function onTrackLoad({ id, url, title, artist }: TrackPlayArgs) {
-    // pause because we want to pause previous track was playing
-    // so we will not have two tracks playing together
-    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
-
-    if (isYoutubeLink && state.player.destroy) {
-      seekTo(0);
-      setCurrentTime(0);
-      state.player.destroy();
-    }
-
-    state.player.pause();
-    setIsLoaded(false);
-    dispatchTrackData({ dispatch, id, url, title, artist });
-  }
 
   function onTrackPlay() {
     dispatchPlayTrack({ dispatch });
@@ -88,7 +76,11 @@ const useMusicPlayer = () => {
   }
 
   function seekTo(time: Number) {
-    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+    if (!state.player) {
+      return;
+    }
+
+    const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
     if (isYoutubeLink) {
       state.player.seek(time);
     } else {
@@ -96,20 +88,43 @@ const useMusicPlayer = () => {
     }
   }
 
+  function onTrackLoad({ id, url, title, artist }: TrackPlayArgs) {
+    if (!state.player) {
+      return;
+    }
+    // pause because we want to pause previous track was playing
+    // so we will not have two tracks playing together
+    const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
+
+    if (isYoutubeLink && state.player.destroy) {
+      // seekTo(0);
+      setCurrentTime(0);
+      state.player.destroy();
+    }
+
+    state.player?.pause();
+    setIsLoaded(false);
+    dispatchTrackData({ dispatch, id, url, title, artist });
+  }
+
   // @EFFECTS
 
   // play pause effect
   useEffect(() => {
     if (state.isPlaying) {
-      state.player.play();
+      state.player?.play();
     } else {
-      state.player.pause();
+      state.player?.pause();
     }
   }, [state.isPlaying, state.player]);
 
   // load youtube link effect
   useEffect(() => {
-    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+    if (!state.player) {
+      return;
+    }
+
+    const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
 
     if (isYoutubeLink) {
       const id = getYouTubeID(state.currentTrackUrl);
@@ -126,30 +141,33 @@ const useMusicPlayer = () => {
     setIsLoaded(true);
   };
   useEffect(() => {
-    const isYoutubeLink = state.currentTrackUrl.match(youtubeRegExp);
+    const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
 
     // if youtube link get duration from youtubelink player and set it
     if (isYoutubeLink) {
       state.player.on("playing", () => {
-        setDuration(state.player.getDuration());
+        setDuration(state.player?.getDuration());
       });
       setIsLoaded(true);
       // if regular media element get duration from it
     } else {
+      if (!state.player) {
+        return;
+      }
+
       state.player.addEventListener("canplay", handleCanPlay);
 
-      if (state.player.duration) {
-        setDuration(state.player.duration);
+      if (state.player?.duration) {
+        setDuration(state.player.duration || 0);
       }
 
       return () => {
-        state.player.removeEventListener("canplay", handleCanPlay);
+        state.player?.removeEventListener("canplay", handleCanPlay);
       };
     }
-  }, [state.player, state.player.duration, state.currentTrackId]);
+  }, [state.player, state.player?.duration, state.currentTrackId]);
 
   return {
-    state,
     duration,
     currentTime,
     trackData: state.trackData,
@@ -159,6 +177,4 @@ const useMusicPlayer = () => {
     onTrackPlay,
     onTrackPause,
   };
-};
-
-export { useMusicPlayer };
+}

@@ -12,7 +12,7 @@ import styles from "./index.module.css";
 
 const Player = () => {
   const { trackData } = useMusicPlayer();
-  console.log("trackData: ", trackData);
+
   return (
     <div className={styles.container}>
       <div className={styles.videoFrameWrapper}>

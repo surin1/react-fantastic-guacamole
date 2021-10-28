@@ -15,10 +15,13 @@ type PlayPauseTrackArgTypes = {
 export function dispatchTrackData({
   dispatch,
   id,
-  url,
-  title,
-  artist,
+  url = "",
+  title = "",
+  artist = "",
 }: PlayTrackArgTypes) {
+  if (!url) {
+    return;
+  }
   // need to dispatch different player depending on if it's youtube or default audio
   const isYoutubeLink = url.match(youtubeRegExp);
   if (isYoutubeLink) {

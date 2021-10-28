@@ -7,7 +7,7 @@ import { TRACKS_LIST } from "./listData";
 import styles from "./index.module.css";
 
 const List = () => {
-  const { onTrackLoad, onTrackPause, isPlaying } = useMusicPlayer();
+  const { onTrackLoad, isPlaying } = useMusicPlayer();
 
   return (
     <div className={styles.container}>
