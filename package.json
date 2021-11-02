@@ -1,5 +1,5 @@
 {
-  "version": "1.0.48",
+  "version": "1.0.49",
   "description": "universal audio player for audio links and youtube links",
   "name": "react-fantastic-guacamole",
   "main": "./dist/index.js",

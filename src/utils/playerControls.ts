@@ -26,8 +26,8 @@ export function dispatchTrackData({
   const isYoutubeLink = url.match(youtubeRegExp);
   if (isYoutubeLink) {
     const youtubePlayer = new YTPlayer("#player", {
-      width: 100,
-      height: 100,
+      width: 1,
+      height: 1,
     });
     dispatch({ type: "PLAYER_SET", payload: youtubePlayer });
   } else {

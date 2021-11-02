@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useMusicPlayer } from "../../hooks";
+import { formatToMMSS } from "../../utils/helpers/time";
 
-const CurrentTime = () => {
+const CurrentTime = ({}) => {
   const { currentTime } = useMusicPlayer();
 
-  return <div>{currentTime}</div>;
+  return <div>{formatToMMSS(currentTime)}</div>;
 };
 
 export default CurrentTime;

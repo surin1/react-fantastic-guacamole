@@ -3,15 +3,14 @@ import { useMusicPlayer } from "../../hooks";
 
 import styles from "./index.module.css";
 
-const SeekSlider = () => {
-  const {
-    onTrackPlay,
-    onTrackPause,
-    duration,
-    seekTo,
-    currentTime,
-    isPlaying,
-  } = useMusicPlayer();
+const SeekSlider = ({
+  trackColor = "#ffe29e",
+  fillColor = "#dc9300",
+}: {
+  trackColor?: string;
+  fillColor?: string;
+}) => {
+  const { duration, seekTo, currentTime } = useMusicPlayer();
   const barRef = useRef(null);
 
   const fillWidth = barRef.current
@@ -20,7 +19,11 @@ const SeekSlider = () => {
 
   return (
     <div>
-      <div className={styles.track} ref={barRef}>
+      <div
+        className={styles.track}
+        ref={barRef}
+        style={{ backgroundColor: trackColor }}
+      >
         <input
           min="0"
           value={currentTime}
@@ -32,7 +35,7 @@ const SeekSlider = () => {
         <div
           className={styles.seekSliderFill}
           style={{
-            backgroundColor: "#dce0df",
+            backgroundColor: fillColor,
             width: fillWidth,
           }}
         />

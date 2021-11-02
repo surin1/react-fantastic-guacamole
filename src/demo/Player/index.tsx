@@ -16,7 +16,7 @@ const Player = () => {
   return (
     <div className={styles.container}>
       <div className={styles.videoFrameWrapper}>
-        <VideoFrame />
+        <VideoFrame width={234} height={132} />
       </div>
       <div className={styles.content}>
         <div className={styles.header}>
@@ -26,7 +26,10 @@ const Player = () => {
           </div>
 
           <div>
-            <PlayPauseButton />
+            <PlayPauseButton
+              playButtonClass={styles.playButton}
+              pauseButtonClass={styles.pauseButton}
+            />
           </div>
         </div>
         <div className={styles.timeTrack}>

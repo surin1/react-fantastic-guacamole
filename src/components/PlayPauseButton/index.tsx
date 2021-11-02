@@ -1,13 +1,15 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { useMusicPlayer } from "../../hooks";
 
-type Props = {
-  id: string;
-  url: string;
-};
-
-const PlayPauseButton = () => {
+const PlayPauseButton = ({
+  playButtonClass,
+  pauseButtonClass,
+}: {
+  playButtonClass: string;
+  pauseButtonClass: string;
+}) => {
   const { onTrackPlay, onTrackPause, isPlaying } = useMusicPlayer();
+  const buttonClass = isPlaying ? pauseButtonClass : playButtonClass;
   const handleClick = () => {
     if (isPlaying) {
       onTrackPause();
@@ -16,11 +18,7 @@ const PlayPauseButton = () => {
     }
   };
 
-  return (
-    <div>
-      <button onClick={handleClick}>{isPlaying ? "pause" : "play"}</button>
-    </div>
-  );
+  return <div className={buttonClass} onClick={handleClick} />;
 };
 
 export default PlayPauseButton;

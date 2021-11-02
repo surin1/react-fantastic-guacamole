@@ -97,7 +97,6 @@ export function useMusicPlayer() {
     const isYoutubeLink = state.currentTrackUrl?.match(youtubeRegExp);
 
     if (isYoutubeLink && state.player.destroy) {
-      // seekTo(0);
       setCurrentTime(0);
       state.player.destroy();
     }
@@ -170,11 +169,16 @@ export function useMusicPlayer() {
   return {
     duration,
     currentTime,
-    trackData: state.trackData,
+    trackData: {
+      id: state.currentTrackId,
+      url: state.currentTrackUrl,
+      ...state.trackData,
+    },
     seekTo,
     isPlaying: state.isPlaying,
     onTrackLoad,
     onTrackPlay,
     onTrackPause,
+    player: state.player,
   };
 }
