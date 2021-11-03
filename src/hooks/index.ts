@@ -42,6 +42,9 @@ function useInterval(callback: any, delay: any) {
 export function useMusicPlayer() {
   const [state, dispatch] = useContext(PlayerContext);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isAutoplayTrackAfterLoad, setIsAutoplayTrackAfterLoad] = useState(
+    false
+  );
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -86,9 +89,13 @@ export function useMusicPlayer() {
     } else {
       state.player.currentTime = time;
     }
+    onTrackPlay();
   }
 
-  function onTrackLoad({ id, url, title, artist }: TrackPlayArgs) {
+  function onTrackLoad(
+    { id, url, title, artist }: TrackPlayArgs,
+    isAutoplay: boolean
+  ) {
     if (!state.player) {
       return;
     }
@@ -104,18 +111,25 @@ export function useMusicPlayer() {
     state.player?.pause();
     setIsLoaded(false);
     dispatchTrackData({ dispatch, id, url, title, artist });
+
+    if (isAutoplay) {
+      setIsAutoplayTrackAfterLoad(true);
+    }
   }
 
   // @EFFECTS
 
   // play pause effect
   useEffect(() => {
-    if (state.isPlaying) {
-      state.player?.play();
-    } else {
-      state.player?.pause();
+    if (!state.player || !isLoaded) {
+      return;
     }
-  }, [state.isPlaying, state.player]);
+    if (state.isPlaying) {
+      state.player.play();
+    } else {
+      state.player.pause();
+    }
+  }, [state.isPlaying, state.player, isLoaded]);
 
   // load youtube link effect
   useEffect(() => {
@@ -127,13 +141,15 @@ export function useMusicPlayer() {
 
     if (isYoutubeLink) {
       const id = getYouTubeID(state.currentTrackUrl);
-      state.player.load(id, true);
-    }
+      state.player.load(id, isAutoplayTrackAfterLoad);
 
-    return () => {
+      if (isAutoplayTrackAfterLoad) {
+        onTrackPlay();
+      }
+    } else if (isAutoplayTrackAfterLoad) {
       dispatchPlayTrack({ dispatch });
-    };
-  }, [state.currentTrackUrl]);
+    }
+  }, [state.currentTrackUrl, isAutoplayTrackAfterLoad]);
 
   // handle if player loaded and set neccessary data to state
   const handleCanPlay = () => {

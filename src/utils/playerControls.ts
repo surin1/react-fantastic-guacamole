@@ -9,7 +9,7 @@ type PlayTrackArgTypes = {
   artist: string;
 };
 type PlayPauseTrackArgTypes = {
-  dispatch: ({}) => any;
+  dispatch: (any) => any;
 };
 
 export function dispatchTrackData({
