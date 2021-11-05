@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 
 type Props = {
   children: JSX.Element;
@@ -14,6 +14,7 @@ interface InitialState {
   currentTrackUrl: string;
   isPlaying: boolean;
   trackData: Track;
+  isAutoPlay: boolean;
 }
 const PlayerContext = React.createContext([{} as InitialState, {} as any]);
 
@@ -23,6 +24,7 @@ enum PLAYER_ACTIONS {
   CURRENT_TRACK_URL_SET = "CURRENT_TRACK_URL_SET",
   IS_PLAYING_SET = "IS_PLAYING_SET",
   CURRENT_TRACK_DATA_SET = "CURRENT_TRACK_DATA_SET",
+  AUTOPLAY_SET = "AUTOPLAY_SET",
 }
 interface SetPlayerAction {
   type: PLAYER_ACTIONS;
@@ -56,6 +58,11 @@ function playerReducer(state: InitialState, action: SetPlayerAction) {
         ...state,
         trackData: payload,
       };
+    case PLAYER_ACTIONS.AUTOPLAY_SET:
+      return {
+        ...state,
+        isAutoPlay: payload,
+      };
     default:
       return state;
   }
@@ -70,6 +77,7 @@ const initialState = {
     title: "",
     artist: "",
   },
+  isAutoPlay: false,
 };
 const PlayerProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(playerReducer, initialState);

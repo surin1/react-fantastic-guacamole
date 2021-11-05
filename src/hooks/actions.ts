@@ -1,12 +1,13 @@
-import { youtubeRegExp } from "./regexp";
+import { youtubeRegExp } from "../utils/regexp";
 import YTPlayer from "yt-player";
 
 type PlayTrackArgTypes = {
   dispatch: ({}) => any;
-  id: string;
+  id: number;
   url: string;
   title: string;
   artist: string;
+  isAutoPlay: boolean;
 };
 type PlayPauseTrackArgTypes = {
   dispatch: ({}) => any;
@@ -18,6 +19,7 @@ export function dispatchTrackData({
   url = "",
   title = "",
   artist = "",
+  isAutoPlay = false,
 }: PlayTrackArgTypes) {
   if (!url) {
     return;
@@ -38,6 +40,7 @@ export function dispatchTrackData({
   dispatch({ type: "CURRENT_TRACK_URL_SET", payload: url });
   dispatch({ type: "CURRENT_TRACK_ID_SET", payload: id });
   dispatch({ type: "CURRENT_TRACK_DATA_SET", payload: { title, artist } });
+  dispatch({ type: "AUTOPLAY_SET", payload: isAutoPlay });
 }
 
 export function dispatchPauseTrack({ dispatch }: PlayPauseTrackArgTypes) {

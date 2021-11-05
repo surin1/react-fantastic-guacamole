@@ -3,13 +3,14 @@ export const TRACKS_LIST = [
     id: 0,
     title: "Public Link example",
     artist: "google storage",
-    link: "https://www.youtube.com/watch?v=8SYhZjme35k&ab_channel=MiCasaVEVO",
+    link:
+      "https://storage.googleapis.com/customer-public-us/5b6ce331220f4ef4bca12c7171c1ef4bmiyvcoxzbsocymnotxcizpsqddydat/tracks/5b6ce331220f4ef4bca12c7171c1ef4bmiyvcoxzbsocymnotxcizpsqddydat1000583906.mp3",
   },
   {
     id: 1,
     title: "Ogaranya",
     artist: "Reminisce, Fireboy DML",
-    link: "https://www.youtube.com/watch?v=AT6aBynWDgE&ab_channel=Reminisce",
+    link: "https://www.youtube.com/watch?v=8SYhZjme35k&ab_channel=MiCasaVEVO",
   },
   {
     id: 2,

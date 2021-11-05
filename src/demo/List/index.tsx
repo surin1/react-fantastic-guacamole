@@ -8,9 +8,10 @@ import styles from "./index.module.css";
 
 const List = () => {
   const { onTrackLoad } = useMusicPlayer();
-  const { id, link, title, artist } = TRACKS_LIST[0];
+  const { id, link, title, artist } = TRACKS_LIST[1];
+
   useEffect(() => {
-    onTrackLoad({ id: String(id), url: link, title, artist }, true);
+    onTrackLoad({ id: id, url: link, title, artist, isAutoPlay: false });
   }, []);
 
   return (
@@ -20,17 +21,21 @@ const List = () => {
         <div className={styles.cell}>title</div>
         <div className={styles.cell}>artist</div>
       </div>
-      {TRACKS_LIST.map(({ id, title, link, artist }: any) => (
-        <div
-          className={styles.track}
-          key={id}
-          onClick={() => onTrackLoad({ id, url: link, title, artist }, true)}
-        >
-          <div className={styles.cell}>{id}</div>
-          <div className={styles.cell}>{title}</div>
-          <div className={styles.cell}>{artist}</div>
-        </div>
-      ))}
+      {TRACKS_LIST.map(({ id, title, link, artist }: any) => {
+        return (
+          <div
+            className={styles.track}
+            key={id}
+            onClick={() => {
+              onTrackLoad({ id, url: link, title, artist, isAutoPlay: true });
+            }}
+          >
+            <div className={styles.cell}>{id}</div>
+            <div className={styles.cell}>{title}</div>
+            <div className={styles.cell}>{artist}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };

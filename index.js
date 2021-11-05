@@ -1,4 +1,9 @@
-import { useMusicPlayer } from "./src/hooks";
+import {
+  useMusicPlayer,
+  useMusicPlayerUi,
+  useMusicPlayerCurrentTime,
+  useMusicPlayerDuration,
+} from "./src/hooks";
 import CurrentTime from "./src/components/CurrentTime";
 import Duration from "./src/components/Duration";
 import PlayPauseButton from "./src/components/PlayPauseButton";
@@ -8,6 +13,9 @@ import { PlayerProvider } from "./src/context";
 
 export {
   useMusicPlayer,
+  useMusicPlayerUi,
+  useMusicPlayerCurrentTime,
+  useMusicPlayerDuration,
   CurrentTime,
   Duration,
   PlayPauseButton,

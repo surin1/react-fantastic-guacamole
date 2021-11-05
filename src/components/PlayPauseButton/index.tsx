@@ -1,5 +1,5 @@
 import React from "react";
-import { useMusicPlayer } from "../../hooks";
+import { useMusicPlayer, useMusicPlayerUi } from "../../hooks";
 
 const PlayPauseButton = ({
   playButtonClass,
@@ -8,8 +8,10 @@ const PlayPauseButton = ({
   playButtonClass: string;
   pauseButtonClass: string;
 }) => {
-  const { onTrackPlay, onTrackPause, isPlaying } = useMusicPlayer();
+  const { isPlaying } = useMusicPlayerUi();
+  const { onTrackPlay, onTrackPause } = useMusicPlayer();
   const buttonClass = isPlaying ? pauseButtonClass : playButtonClass;
+
   const handleClick = () => {
     if (isPlaying) {
       onTrackPause();

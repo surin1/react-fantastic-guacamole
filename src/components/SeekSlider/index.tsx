@@ -1,5 +1,9 @@
-import React, { useState, useRef } from "react";
-import { useMusicPlayer } from "../../hooks";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import {
+  useMusicPlayer,
+  useMusicPlayerCurrentTime,
+  useMusicPlayerDuration,
+} from "../../hooks";
 
 import styles from "./index.module.css";
 
@@ -10,12 +14,19 @@ const SeekSlider = ({
   trackColor?: string;
   fillColor?: string;
 }) => {
-  const { duration, seekTo, currentTime } = useMusicPlayer();
+  const duration = useMusicPlayerDuration();
+  const currentTime = useMusicPlayerCurrentTime();
+  const { seekTo } = useMusicPlayer();
+  const [fillWidth, setFillWidth] = useState("0");
   const barRef = useRef(null);
 
-  const fillWidth = barRef.current
-    ? (currentTime / duration) * barRef.current.offsetWidth + "px"
-    : 0;
+  useEffect(() => {
+    const value = barRef.current
+      ? (currentTime / duration) * barRef.current.offsetWidth + "px"
+      : "0";
+
+    setFillWidth(value);
+  }, [currentTime, duration, barRef.current]);
 
   return (
     <div>

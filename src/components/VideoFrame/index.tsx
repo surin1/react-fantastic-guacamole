@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-import { useMusicPlayer } from "../../hooks";
+import { useMusicPlayerUi } from "../../hooks";
 
 const VideoFrame = ({ width, height }: { width: number; height: number }) => {
-  const { player } = useMusicPlayer();
+  const { player } = useMusicPlayerUi();
 
   useEffect(() => {
     if (player.setSize) {

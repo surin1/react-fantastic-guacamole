@@ -1,9 +1,9 @@
 import React from "react";
-import { useMusicPlayer } from "../../hooks";
+import { useMusicPlayerCurrentTime } from "../../hooks";
 import { formatToMMSS } from "../../utils/helpers/time";
 
 const CurrentTime = ({}) => {
-  const { currentTime } = useMusicPlayer();
+  const currentTime = useMusicPlayerCurrentTime();
 
   return <div>{formatToMMSS(currentTime)}</div>;
 };
