@@ -1,0 +1,21 @@
+.container {
+  background-color: #727677;
+  padding: 12px 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.content {
+  max-width: 1440px;
+  margin: 0 auto;
+  line-height: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logo {
+  background-image: url("./assets/logo.svg");
+  min-width: 95px;
+  height: 40px;
+  cursor: pointer;
+}
